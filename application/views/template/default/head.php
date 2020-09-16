@@ -8,7 +8,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/bootstraps/bootstrap.min.css')?>">
-    <!-- Bootstrap CSS -->
+    <!-- Datatable CSS -->
+    <link rel="stylesheet" href="<?=base_url('assets/datatables/jquery.dataTables.min.css')?>">
+    <!-- App CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/css/app.css')?>">
 
     <title>Training CI</title>

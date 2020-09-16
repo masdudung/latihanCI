@@ -30,16 +30,48 @@ class Home extends MY_Controller
         $this->template->render('home', $data);
     }
 
+    /**
+     * render users page 
+     */
+    public function user()
+    {
+        $username = $this->session->user;
+        $user = $this->UserModel->getUser($username);
+        $data['user'] = $user[0];
+
+        $users = $this->UserModel->getAllUser();
+        $data['users'] = $users;
+        $data['customjs'] = 'admin.js';
+
+        $this->template->render('user', $data);
+    }
+
+    /**
+     * render countries page 
+     */
+    public function country()
+    {
+        $username = $this->session->user;
+        $user = $this->UserModel->getUser($username);
+        $data['user'] = $user[0];
+
+        $countries = $this->UserModel->getAllCountry();
+        $data['countries'] = $countries;
+        $data['customjs'] = 'admin.js';
+
+        $this->template->render('country', $data);
+    }
+
     public function profileUpdate()
     {
         $username = $this->session->user;
         $about = $this->input->post('about');
         $updateuser = $this->UserModel->updateUser($username, $about);
-        
+
         $notify = array('error' => true, 'message' => 'Terjadi kesalahan');
-        if($updateuser==true)
+        if ($updateuser == true)
             $notify = array('error' => false, 'message' => 'Berhasil update data');
-        
+
         $this->session->set_flashdata('notify', $notify);
         redirect(base_url('home'));
     }
