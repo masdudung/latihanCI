@@ -17,6 +17,7 @@
             <table id="countries_table" class="display">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Name</th>
                         <th>Alpha2 Code</th>
                         <th>Alpha3 Code</th>
@@ -26,26 +27,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if ($countries) {
-                        foreach ($countries as $key => $item) {
-                            # code...
-                    ?>
-                    <tr>
-                        <td><?= "$item->name"; ?></td>
-                        <td><?= $item->alpha2_code; ?></td>
-                        <td><?= $item->alpha3_code; ?></td>
-                        <td><?= $item->calling_code; ?></td>
-                        <td><?= $item->demonym; ?></td>
-                        <td><img src="<?= $item->flag; ?>" alt="" width="20px"></td>
-                    </tr>
-                    <?php
-                        }
-                    }
-                    ?>
+
                 </tbody>
             </table>
             <br>
         </div>
     </div>
 </div>
+<script>
+    var country_ajax_url = "<?= base_url('home/ajax_country'); ?>";
+</script>

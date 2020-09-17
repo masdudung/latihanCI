@@ -7,7 +7,9 @@ class Home extends MY_Controller
     {
         parent::__construct();
 
+        # load model
         $this->load->model('UserModel');
+        $this->load->model('CountryModel');
 
         # check user login
         $user = $this->session->user;
@@ -38,12 +40,40 @@ class Home extends MY_Controller
         $username = $this->session->user;
         $user = $this->UserModel->getUser($username);
         $data['user'] = $user[0];
-
-        $users = $this->UserModel->getAllUser();
-        $data['users'] = $users;
         $data['customjs'] = 'admin.js';
 
         $this->template->render('user', $data);
+    }
+
+    public function ajax_user()
+    {
+        header('Content-Type: application/json');
+
+        $list = $this->UserModel->get_datatables();
+        $data = array();
+        $no = $this->input->post('start');
+        foreach ($list as $field) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $field->fullname;
+            $row[] = $field->email;
+            $row[] = $field->phone_number;
+            $row[] = $field->gender;
+            $row[] = $field->name;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "recordsTotal" => $this->UserModel->count_all(),
+            "recordsFiltered" => $this->UserModel->count_filtered(),
+            "data" => $data,
+        );
+
+        //output dalam format JSON
+        echo json_encode($output);
     }
 
     /**
@@ -54,12 +84,41 @@ class Home extends MY_Controller
         $username = $this->session->user;
         $user = $this->UserModel->getUser($username);
         $data['user'] = $user[0];
-
-        $countries = $this->UserModel->getAllCountry();
-        $data['countries'] = $countries;
         $data['customjs'] = 'admin.js';
 
         $this->template->render('country', $data);
+    }
+
+    public function ajax_country()
+    {
+        header('Content-Type: application/json');
+
+        $list = $this->CountryModel->get_datatables();
+        $data = array();
+        $no = $this->input->post('start');
+        foreach ($list as $field) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $field->name;
+            $row[] = $field->alpha2_code;
+            $row[] = $field->alpha3_code;
+            $row[] = $field->calling_code;
+            $row[] = $field->demonym;
+            $row[] = "<img src='$field->flag' width='20px'>";
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "recordsTotal" => $this->CountryModel->count_all(),
+            "recordsFiltered" => $this->CountryModel->count_filtered(),
+            "data" => $data,
+        );
+
+        //output dalam format JSON
+        echo json_encode($output);
     }
 
     public function profileUpdate()

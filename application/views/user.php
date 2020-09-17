@@ -17,6 +17,7 @@
             <table id="users_table" class="display">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone Number</th>
@@ -25,25 +26,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if ($users) {
-                        foreach ($users as $key => $item) {
-                            # code...
-                    ?>
-                    <tr>
-                        <td><?= "$item->first_name $item->last_name"; ?></td>
-                        <td><?= $item->email; ?></td>
-                        <td><?= $item->phone_number; ?></td>
-                        <td><?= $item->gender; ?></td>
-                        <td><?= $item->name; ?></td>
-                    </tr>
-                    <?php
-                        }
-                    }
-                    ?>
                 </tbody>
             </table>
             <br>
         </div>
     </div>
 </div>
+<script>
+    var user_ajax_url = "<?= base_url('home/ajax_user'); ?>";
+</script>
