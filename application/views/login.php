@@ -23,11 +23,11 @@ if($notify)
             <form method="POST" action="<?=base_url('login/auth')?>">
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" name="username" value="masdudung" class="form-control" placeholder="Enter Username">
+                    <input type="text" name="username" value="percy.johns@yahoo.com" class="form-control" placeholder="Enter Username">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" name="password" value="IkanTeriMasukAngin" class="form-control" placeholder="Password">
+                    <input type="password" name="password" value="lalala" class="form-control" placeholder="Password">
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>

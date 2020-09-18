@@ -2,7 +2,6 @@
 
 class UserModel extends CI_Model
 {
-    public $table = 'user';
     public $table1 = 'users';
     public $table2 = 'countries';
 
@@ -15,13 +14,43 @@ class UserModel extends CI_Model
 
     public function getUser($username)
     {
-
         $data = $this->db
             ->select('*')
-            ->get_where($this->table, array('username' => $username), 1, 0)
+            ->get_where($this->table1, array('email' => $username), 1, 0)
             ->result();
 
         return $data;
+    }
+
+    public function getUserByID($uid)
+    {
+        $data = $this->db
+            ->select('*')
+            ->get_where($this->table1, array('id' => $uid), 1, 0)
+            ->result();
+
+        return $data;
+    }
+
+    public function insertUser($data)
+    {
+        return $this->db->insert($this->table1, $data);
+    }
+
+    public function updateUserByID($uid, $data)
+    {
+        $this->db->where('id', $uid);
+        $this->db->update($this->table1, $data);
+
+        return $this->db->affected_rows();
+    }
+
+    public function deleteUserByID($uid)
+    {
+        $this->db->where('id', $uid);
+        $this->db->delete($this->table1);
+
+        return $this->db->affected_rows();
     }
 
     public function getAllUser()
@@ -70,12 +99,21 @@ class UserModel extends CI_Model
         }
     }
 
-    function get_datatables()
+    function get_datatables($_page = null, $_length = null)
     {
         $this->_get_datatables_query();
-        if ($this->input->post('length') != -1)
-            $this->db->limit($this->input->post('length'), $this->input->post('start'));
+        $length = $this->input->post_get('length');
+        $start = $this->input->post('start');
+
+        if ($_length)
+            $length = $_length;
+        if ($_page)
+            $start = $_page;
+
+        if ($length != -1)
+            $this->db->limit($length, $start);
         $query = $this->db->get();
+
         return $query->result();
     }
 
@@ -92,14 +130,14 @@ class UserModel extends CI_Model
         return $this->db->count_all_results();
     }
 
-    public function updateUser($username, $about)
+    public function updateUser($username, $phone_number)
     {
 
         $data = array(
-            'about' => $about
+            'phone_number' => $phone_number
         );
 
-        $this->db->where('username', $username);
-        return $this->db->update($this->table, $data);
+        $this->db->where('email', $username);
+        return $this->db->update($this->table1, $data);
     }
 }

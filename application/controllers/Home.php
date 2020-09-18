@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use \Firebase\JWT\JWT;
+
 class Home extends MY_Controller
 {
     public function __construct()
@@ -124,8 +126,8 @@ class Home extends MY_Controller
     public function profileUpdate()
     {
         $username = $this->session->user;
-        $about = $this->input->post('about');
-        $updateuser = $this->UserModel->updateUser($username, $about);
+        $phone_number = $this->input->post('phone_number');
+        $updateuser = $this->UserModel->updateUser($username, $phone_number);
 
         $notify = array('error' => true, 'message' => 'Terjadi kesalahan');
         if ($updateuser == true)

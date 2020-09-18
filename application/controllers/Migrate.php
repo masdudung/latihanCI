@@ -21,7 +21,7 @@ class Migrate extends CI_Controller
         $faker = Faker\Factory::create();
 
         $users = array();
-        for ($i = 0; $i < 1; $i++) {
+        for ($i = 0; $i < 50; $i++) {
 
             $user = array(
                 'first_name' => $faker->firstName,
@@ -30,7 +30,7 @@ class Migrate extends CI_Controller
                 'phone_number' => $faker->PhoneNumber,
                 'gender' => ($i % 2 == 0) ? "M" : "F",
                 'country_id' => rand(0, 50),
-                'password' => password_hash($faker->lastName, PASSWORD_DEFAULT),
+                'password' => password_hash('lalala', PASSWORD_DEFAULT),
                 'country_id' => rand(0, 50),
                 'created_at' => time(),
                 'update_at' => time(),

@@ -23,9 +23,9 @@ class CountryModel extends CI_Model
                 if ($i === 0) // looping awal
                 {
                     $this->db->group_start();
-                    $this->db->like($item, $_POST['search']['value']);
+                    $this->db->like($item, (isset($_POST['search']['value']) ? $_POST['search']['value'] : null));
                 } else {
-                    $this->db->or_like($item, $_POST['search']['value']);
+                    $this->db->or_like($item, (isset($_POST['search']['value']) ? $_POST['search']['value'] : null));
                 }
 
                 if (count($this->column_search) - 1 == $i)
@@ -42,12 +42,21 @@ class CountryModel extends CI_Model
         }
     }
 
-    function get_datatables()
+    function get_datatables($_page = null, $_length = null)
     {
         $this->_get_datatables_query();
-        if ($this->input->post('length') != -1)
-            $this->db->limit($this->input->post('length'), $this->input->post('start'));
+        $length = $this->input->post_get('length');
+        $start = $this->input->post('start');
+
+        if ($_length)
+            $length = $_length;
+        if ($_page)
+            $start = $_page;
+
+        if ($length != -1)
+            $this->db->limit($length, $start);
         $query = $this->db->get();
+
         return $query->result();
     }
 

@@ -36,7 +36,7 @@ class Login extends MY_Controller
 			# if password is correct
 			if (password_verify($password, $user[0]->password)) {
 				$currentUser = array(
-					'user'  => $user[0]->username,
+					'user'  => $user[0]->email,
 				);
 				$this->session->set_userdata($currentUser);
 

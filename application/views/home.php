@@ -12,7 +12,7 @@ if($notify)
 ?>
 
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 mr-md-auto font-weight-normal">Welcome <?= $user->username; ?></h5>
+    <h5 class="my-0 mr-md-auto font-weight-normal">Welcome <?= $user->first_name." ". $user->last_name; ?></h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark" href="<?=base_url('home/user');?>">List Users</a>
         <a class="p-2 text-dark" href="<?=base_url('home/country');?>">List Countries</a>
@@ -31,12 +31,12 @@ if($notify)
             <?=$notify_html;?>
             <form method="POST" action="<?=base_url('home/profileUpdate')?>">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" value="<?=$user->username;?>" class="form-control" disabled>
+                    <label>Email</label>
+                    <input type="text" name="username" value="<?=$user->email;?>" class="form-control" disabled>
                 </div>
                 <div class="form-group">
                     <label>Bio</label>
-                    <textarea name="about" class="form-control" placeholder="I am a.." required><?=$user->about;?></textarea>
+                    <textarea name="phone_number" class="form-control" placeholder="I am a.." required><?=$user->phone_number;?></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
