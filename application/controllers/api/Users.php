@@ -33,29 +33,7 @@ class Users extends API_Controller
 
     public function index_post()
     {
-        $gender = (substr($this->input->post('gender'), 0, 1) == 'm') ? 'M' : 'F';
-
-        $user = array(
-            'first_name' => $this->input->post('first_name'),
-            'last_name' => $this->input->post('last_name'),
-            'email' => $this->input->post('email'),
-            'phone_number' => $this->input->post('phone_number'),
-            'gender' => $gender,
-            'country_id' => rand(1, 250),
-            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-        );
-
-        $existUser = $this->UserModel->getUser($user['email']);
-        if (!$existUser) {
-            $insert = $this->UserModel->insertUser($user);
-            if ($insert)
-                $this->message['message'] = 'User register success';
-        } else {
-            $this->message['message'] = 'Email Already registered';
-        }
-
-
-        $this->response($this->message, 200);
+        $this->_register();
     }
 
     public function index_put()
@@ -64,23 +42,31 @@ class Users extends API_Controller
         if (!is_numeric($uid))
             $this->response($this->message, 200);
 
-        $existUser = $this->UserModel->getUserByID($uid);
-        if ($existUser) {
-            $gender = (substr($this->input->input_stream('gender'), 0, 1) == 'm') ? 'M' : 'F';
-            $user = array(
-                'first_name' => $this->input->input_stream('first_name'),
-                'last_name' => $this->input->input_stream('last_name'),
-                'phone_number' => $this->input->input_stream('phone_number'),
-                'gender' => $gender,
-                'country_id' => (int) $this->input->input_stream('country_id'),
-                'password' => password_hash($this->input->input_stream('password'), PASSWORD_DEFAULT),
-            );
+        $gender = (substr($this->input->input_stream('gender'), 0, 1) == 'm') ? 'M' : 'F';
+        $user = array(
+            'first_name' => $this->input->input_stream('first_name'),
+            'last_name' => $this->input->input_stream('last_name'),
+            'phone_number' => $this->input->input_stream('phone_number'),
+            'gender' => $gender,
+            'country_id' => (int) $this->input->input_stream('country_id'),
+            'password' => password_hash($this->input->input_stream('password'), PASSWORD_DEFAULT),
+        );
 
-            $update = $this->UserModel->updateUserByID($uid, $user);
-            if ($update)
-                $this->message['message'] = 'User update success';
+        $this->form_validation->set_data($user);
+        if ($this->form_validation->run('put_users') == TRUE) {
+            $existUser = $this->UserModel->getUserByID($uid);
+            if ($existUser) {
+                $update = $this->UserModel->updateUserByID($uid, $user);
+                if ($update)
+                    $this->message['message'] = 'User update success';
+            } else {
+                $this->message['message'] = 'User doesnt exist';
+            }
         } else {
-            $this->message['message'] = 'User doesnt exist';
+            $this->message['message'] = form_error('first_name');
+            $this->message['message'] .= form_error('last_name');
+            $this->message['message'] .= form_error('phone_number');
+            $this->message['message'] .= form_error('password');
         }
 
         $this->response($this->message, 200);
@@ -126,17 +112,29 @@ class Users extends API_Controller
             'password' => password_hash($this->input->input_stream('password'), PASSWORD_DEFAULT),
         );
 
-        $update = $this->UserModel->updateUserByID($this->uid, $user);
-        if ($update)
-            $this->message['message'] = 'profile update success';
+        $this->form_validation->set_data($user);
+        if ($this->form_validation->run('put_users') == TRUE) {
+            $update = $this->UserModel->updateUserByID($this->uid, $user);
+            if ($update)
+                $this->message['message'] = 'profile update success';
+        } else {
+            $this->message['message'] = form_error('first_name');
+            $this->message['message'] .= form_error('last_name');
+            $this->message['message'] .= form_error('phone_number');
+            $this->message['message'] .= form_error('password');
+        }
 
         $this->response($this->message, 200);
     }
 
     public function register_post()
     {
-        $gender = (substr($this->input->post('gender'), 0, 1) == 'm') ? 'M' : 'F';
+        $this->_register();
+    }
 
+    private function _register()
+    {
+        $gender = (substr($this->input->post('gender'), 0, 1) == 'm') ? 'M' : 'F';
         $user = array(
             'first_name' => $this->input->post('first_name'),
             'last_name' => $this->input->post('last_name'),
@@ -147,15 +145,17 @@ class Users extends API_Controller
             'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
         );
 
-        $existUser = $this->UserModel->getUser($user['email']);
-        if (!$existUser) {
+        if ($this->form_validation->run('post_users') == TRUE) {
             $insert = $this->UserModel->insertUser($user);
             if ($insert)
                 $this->message['message'] = 'User register success';
         } else {
-            $this->message['message'] = 'Email Already registered';
+            $this->message['message'] = form_error('first_name');
+            $this->message['message'] .= form_error('last_name');
+            $this->message['message'] .= form_error('phone_number');
+            $this->message['message'] .= form_error('email');
+            $this->message['message'] .= form_error('password');
         }
-
 
         $this->response($this->message, 200);
     }

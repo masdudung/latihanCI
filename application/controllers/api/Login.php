@@ -20,9 +20,7 @@ class Login extends API_Controller
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
-        if (!$username || !$password) {
-            $this->message['message'] = 'Username and password are required';
-        } else {
+        if ($this->form_validation->run('login') == TRUE) {
             $this->load->model('UserModel');
 
             $user = $this->UserModel->getUser($username);
@@ -37,6 +35,9 @@ class Login extends API_Controller
             } else {
                 $this->message['message'] = 'Username or Password incorrect';
             }
+        } else {
+            $this->message['message'] = form_error('username');
+            $this->message['message'] .= form_error('password');
         }
 
         $this->response($this->message, 200);

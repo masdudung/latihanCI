@@ -10,6 +10,12 @@ class API_Controller extends RestController
     public function __construct()
     {
         parent::__construct();
+        
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding");
+        
+        $this->load->library('form_validation');
     }
 
     public function generateToken($user)
